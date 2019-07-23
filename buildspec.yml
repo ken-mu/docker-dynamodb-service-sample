@@ -15,8 +15,7 @@ phases:
       - docker tag $IMAGE_REPOSITORY_NAME:$IMAGE_TAG ${DOCKER_REGISTRY_URL}/$IMAGE_REPOSITORY_NAME:$IMAGE_TAG
       - |
         export DOCKER_IMAGE_DIGEST=$(docker push ${DOCKER_REGISTRY_URL}/$IMAGE_REPOSITORY_NAME:$IMAGE_TAG | grep sha256: | sed -r "s/^.*(sha256:[0-9a-z]+).*$/\1/")
-      - |
-      - [ "${DOCKER_IMAGE_DIGEST}" == "sha256:"* ]
+      - [[ "${DOCKER_IMAGE_DIGEST}" = "sha256:"* ]]
       - cp stage.yml stage.yml.template
       - envsubst < stage.yml.template > stage.yml
 artifacts:
