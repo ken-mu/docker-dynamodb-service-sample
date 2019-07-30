@@ -25,12 +25,16 @@ def tables():
 
 @app.route("/measurement/<client_id>/<timestamp>")
 def get_measurement(client_id, timestamp):
-    response = dynamodb.get_item(
-        TableName=table_name,
-        Key={
-            'clientid': {'N': client_id},
-            'timestamp': {'N': timestamp}
-        })
+    try:
+        response = dynamodb.get_item(
+            TableName=table_name,
+            Key={
+                'clientid': {'N': client_id},
+                'timestamp': {'N': timestamp}
+            })
+    except Exception, e:
+        app.logger.error(e)
+        response = None
     if response.get('Item') is not None:
         return jsonify(response['Item'])
     else:
